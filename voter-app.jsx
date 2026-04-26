@@ -303,7 +303,7 @@ export default function VoterApp() {
       <div className="app">
         <nav className="nav">
           <div className="logo" onClick={() => setView("home")}>
-            💡 INITIATOR
+            <span>🗳 VOTER</span>
             <em style={{fontSize: "0.65rem", fontWeight: 400, marginTop: "2px"}}>საჯარო კენჭისყრა</em>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
@@ -557,7 +557,7 @@ function AdminPanel({ polls, onCreate, onLogout }) {
     <div className="app">
       <style>{CSS}</style>
       <nav className="nav">
-        <div className="logo">💡 INITIATOR <em>· ადმინ-პანელი</em></div>
+        <div className="logo"><span>🗳 VOTER</span> <em>· ადმინ-პანელი</em></div>
         <div style={{ display: "flex", gap: 8 }}>
           <a href="/" className="btn btn-ghost btn-sm">მთავარი</a>
           <button onClick={onLogout} className="btn btn-ghost btn-sm">გამოსვლა</button>
