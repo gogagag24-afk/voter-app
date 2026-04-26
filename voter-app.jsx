@@ -541,7 +541,7 @@ function AdminLogin({ onLogin }) {
       <style>{CSS}</style>
       <div className="main" style={{ display: "grid", placeItems: "center", minHeight: "100vh" }}>
         <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "32px", width: "100%", maxWidth: "400px" }}>
-          <h2 style={{ fontFamily: "'Noto Serif Georgian',serif", marginBottom: "8px", fontSize: "24px" }}>ადმინ-პანელი</h2>
+          <h2 style={{ fontFamily: "'Noto Serif Georgian',serif", marginBottom: "8px", fontSize: "24px" }}>შესვლა</h2>
           <p style={{ color: "var(--muted)", marginBottom: "24px", fontSize: "14px" }}>შეიყვანე პაროლი</p>
           <form onSubmit={handleSubmit}>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="პაროლი" style={{ width: "100%", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "12px", color: "var(--text)", fontSize: "16px", marginBottom: "16px" }} />
@@ -582,7 +582,7 @@ function AdminPanel({ polls, onCreate, onLogout }) {
     <div className="app">
       <style>{CSS}</style>
       <nav className="nav">
-        <div className="logo"><span>🗳 VOTER</span> <em>· ადმინ-პანელი</em></div>
+        <div className="logo"><span>🗳 VOTER</span></div>
         <div style={{ display: "flex", gap: 8 }}>
           <a href="/" className="btn btn-ghost btn-sm">მთავარი</a>
           <button onClick={() => setShowPasswordChange(true)} className="btn btn-ghost btn-sm">პაროლი</button>
@@ -592,8 +592,7 @@ function AdminPanel({ polls, onCreate, onLogout }) {
       <div className="main">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
           <div>
-            <h1 style={{ fontFamily: "'Noto Serif Georgian',serif", fontSize: "28px" }}>ადმინ-პანელი</h1>
-            <p style={{ color: "var(--muted)", marginTop: "8px" }}>{polls.length} კენჭისყრა</p>
+            <h1 style={{ fontFamily: "'Noto Serif Georgian',serif", fontSize: "28px" }}>გვერდი</h1>
           </div>
         </div>
         <CreatePage onBack={() => {}} onSubmit={onCreate} />
