@@ -348,7 +348,6 @@ function HomePage({ polls, allPolls, loading, cat, setCat, search, setSearch, my
         <div className="hero-badge">🔓 რეგისტრაციის გარეშე</div>
         <h1>გამოხატე შენი <em>პოზიცია</em></h1>
         <p>ღია პლატფორმა — ყოველი ხმა ანონიმურია, ყოველი ხმა ითვლება.</p>
-        <button className="btn btn-primary btn-lg" onClick={onCreateClick}>+ ახალი კენჭისყრა</button>
       </div>
 
       <div className="stats">
