@@ -237,12 +237,12 @@ export default function VoterApp() {
   const [search, setSearch] = useState("");
   const [myVotes, setMyVotes] = useState(getMyVotes());
   const [toast, setToast] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(() => {
+const [isAdmin, setIsAdmin] = useState(() => {
     if (typeof window === "undefined") return false;
     return window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
   });
 
-  const isAdminRoute = window.location.pathname.startsWith("/admin");
+  const isAdminRoute = typeof window !== "undefined" && window.location.pathname.startsWith("/admin");
 
   useEffect(() => {
     fetchPolls().then(p => { setPolls(p); setLoading(false); });
