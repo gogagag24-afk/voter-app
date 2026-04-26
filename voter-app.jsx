@@ -524,9 +524,11 @@ function AdminLogin({ onLogin }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const getPassword = () => localStorage.getItem("voter_admin_password") || ADMIN_PASSWORD;
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password !== ADMIN_PASSWORD) {
+    if (password !== getPassword()) {
       setError("პაროლი არასწორია");
       return;
     }
@@ -554,6 +556,28 @@ function AdminLogin({ onLogin }) {
 }
 
 function AdminPanel({ polls, onCreate, onLogout }) {
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordMsg, setPasswordMsg] = useState("");
+
+  const handlePasswordChange = (e) => {
+    e.preventDefault();
+    if (currentPassword !== ADMIN_PASSWORD) {
+      setPasswordMsg("ძირნი პაროლი არასწორია");
+      return;
+    }
+    if (newPassword.length < 4) {
+      setPasswordMsg("პაროლი უნდა იყოს მინიმუმ 4 სიმბოლო");
+      return;
+    }
+    localStorage.setItem("voter_admin_password", newPassword);
+    setPasswordMsg("✓ პაროლი შეცვლილია");
+    setCurrentPassword("");
+    setNewPassword("");
+    setTimeout(() => setShowPasswordChange(false), 1500);
+  };
+
   return (
     <div className="app">
       <style>{CSS}</style>
@@ -561,6 +585,7 @@ function AdminPanel({ polls, onCreate, onLogout }) {
         <div className="logo"><span>🗳 VOTER</span> <em>· ადმინ-პანელი</em></div>
         <div style={{ display: "flex", gap: 8 }}>
           <a href="/" className="btn btn-ghost btn-sm">მთავარი</a>
+          <button onClick={() => setShowPasswordChange(true)} className="btn btn-ghost btn-sm">პაროლი</button>
           <button onClick={onLogout} className="btn btn-ghost btn-sm">გამოსვლა</button>
         </div>
       </nav>
@@ -573,6 +598,23 @@ function AdminPanel({ polls, onCreate, onLogout }) {
         </div>
         <CreatePage onBack={() => {}} onSubmit={onCreate} />
       </div>
+
+      {showPasswordChange && (
+        <div className="modal-backdrop" onClick={() => setShowPasswordChange(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "24px", width: "100%", maxWidth: "360px" }}>
+            <h3 style={{ marginBottom: "16px" }}>პაროლის შეცვლა</h3>
+            <form onSubmit={handlePasswordChange}>
+              <input type="password" placeholder="ძირნი პაროლი" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} style={{ width: "100%", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "10px", color: "var(--text)", marginBottom: "12px" }} />
+              <input type="password" placeholder="ახალი პაროლი" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} style={{ width: "100%", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "10px", color: "var(--text)", marginBottom: "12px" }} />
+              {passwordMsg && <p style={{ color: passwordMsg.includes("✓") ? "var(--yes)" : "var(--no)", fontSize: "13px", marginBottom: "12px" }}>{passwordMsg}</p>}
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button type="button" onClick={() => setShowPasswordChange(false)} className="btn btn-ghost" style={{ flex: 1 }}>გაუქმება</button>
+                <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>შენახვა</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
