@@ -97,8 +97,9 @@ const CSS = `
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans Georgian',sans-serif;min-height:100vh}
 .app{min-height:100vh;display:flex;flex-direction:column}
 .nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.logo{font-family:'IBM Plex Mono',sans-serif;font-size:18px;font-weight:700;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.02em}
-.logo em{color:var(--primary);font-style:normal;font-weight:400;display:block}
+.logo{font-family:'IBM Plex Mono',sans-serif;font-size:20px;font-weight:700;color:var(--text);cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.logo span{font-weight:700;letter-spacing:.02em}
+.logo em{color:var(--primary);font-style:normal;font-weight:400;font-size:11px}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;border:none;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .btn-primary{background:var(--primary);color:#0a0a0a}
@@ -304,7 +305,7 @@ export default function VoterApp() {
         <nav className="nav">
           <div className="logo" onClick={() => setView("home")}>
             <span>🗳 VOTER</span>
-            <em style={{fontSize: "0.65rem", fontWeight: 400, marginTop: "2px"}}>საჯარო კენჭისყრა</em>
+            <em>საჯარო კენჭისყრა</em>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             {view !== "home" && <button className="btn btn-ghost btn-sm" onClick={() => setView("home")}>← მთავარი</button>}
