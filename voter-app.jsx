@@ -592,8 +592,7 @@ function AdminPanel({ polls, onCreate, onLogout }) {
       <div className="main">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
           <div>
-            <h1 style={{ fontFamily: "'Noto Serif Georgian',serif", fontSize: "28px" }}>გვერდი</h1>
-          </div>
+            </div>
         </div>
         <CreatePage onBack={() => {}} onSubmit={onCreate} />
       </div>
