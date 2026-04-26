@@ -97,8 +97,8 @@ const CSS = `
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans Georgian',sans-serif;min-height:100vh}
 .app{min-height:100vh;display:flex;flex-direction:column}
 .nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.logo{font-family:'IBM Plex Mono',sans-serif;font-size:20px;font-weight:700;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:8px}
-.logo em{color:var(--primary);font-style:normal}
+.logo{font-family:'IBM Plex Mono',sans-serif;font-size:18px;font-weight:700;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.02em}
+.logo em{color:var(--primary);font-style:normal;font-weight:400;display:block}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;border:none;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .btn-primary{background:var(--primary);color:#0a0a0a}
@@ -224,6 +224,9 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans Georgian',san
 // ─────────────────────────────────────────────────────────
 // MAIN APP COMPONENT
 // ─────────────────────────────────────────────────────────
+const ADMIN_PASSWORD = "admin123";
+const ADMIN_SESSION_KEY = "voter_admin";
+
 export default function VoterApp() {
   const [polls, setPolls] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -233,6 +236,12 @@ export default function VoterApp() {
   const [search, setSearch] = useState("");
   const [myVotes, setMyVotes] = useState(getMyVotes());
   const [toast, setToast] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+  });
+
+  const isAdminRoute = window.location.pathname.startsWith("/admin");
 
   useEffect(() => {
     fetchPolls().then(p => { setPolls(p); setLoading(false); });
@@ -281,17 +290,24 @@ export default function VoterApp() {
 
   const allVotes = polls.reduce((s, p) => s + totalVotes(p), 0);
 
+  if (isAdminRoute) {
+    if (!isAdmin) {
+      return <AdminLogin onLogin={(success) => { if(success) setIsAdmin(true); window.location.href="/admin"; }} />;
+    }
+    return <AdminPanel polls={polls} onCreate={handleCreate} onLogout={() => { window.sessionStorage.removeItem(ADMIN_SESSION_KEY); setIsAdmin(false); window.location.href="/"; }} />;
+  }
+
   return (
     <>
       <style>{CSS}</style>
       <div className="app">
         <nav className="nav">
           <div className="logo" onClick={() => setView("home")}>
-            🗳 VOTER <em>· საჯარო კენჭისყრა</em>
+            💡 INITIATOR
+            <em style={{fontSize: "0.65rem", fontWeight: 400, marginTop: "2px"}}>საჯარო კენჭისყრა</em>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             {view !== "home" && <button className="btn btn-ghost btn-sm" onClick={() => setView("home")}>← მთავარი</button>}
-            {view === "home" && <button className="btn btn-primary btn-sm" onClick={() => setView("create")}>+ შექმნა</button>}
           </div>
         </nav>
 
@@ -495,6 +511,66 @@ function PollDetail({ poll, myVote, onBack, onVote }) {
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
+// ADMIN COMPONENTS
+// ─────────────────────────────────────────────────────────
+function AdminLogin({ onLogin }) {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (password !== ADMIN_PASSWORD) {
+      setError("პაროლი არასწორია");
+      return;
+    }
+    window.sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+    onLogin(true);
+  };
+
+  return (
+    <div className="app">
+      <style>{CSS}</style>
+      <div className="main" style={{ display: "grid", placeItems: "center", minHeight: "100vh" }}>
+        <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "32px", width: "100%", maxWidth: "400px" }}>
+          <h2 style={{ fontFamily: "'Noto Serif Georgian',serif", marginBottom: "8px", fontSize: "24px" }}>ადმინ-პანელი</h2>
+          <p style={{ color: "var(--muted)", marginBottom: "24px", fontSize: "14px" }}>შეიყვანე პაროლი</p>
+          <form onSubmit={handleSubmit}>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="პაროლი" style={{ width: "100%", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "12px", color: "var(--text)", fontSize: "16px", marginBottom: "16px" }} />
+            {error && <p style={{ color: "var(--no)", fontSize: "13px", marginBottom: "16px" }}>{error}</p>}
+            <button type="submit" className="btn btn-primary" style={{ width: "100%" }}>შესვლა</button>
+          </form>
+          <a href="/" style={{ display: "block", textAlign: "center", marginTop: "16px", color: "var(--muted)", fontSize: "14px" }}>← მთავარ გვერდზე</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminPanel({ polls, onCreate, onLogout }) {
+  return (
+    <div className="app">
+      <style>{CSS}</style>
+      <nav className="nav">
+        <div className="logo">💡 INITIATOR <em>· ადმინ-პანელი</em></div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <a href="/" className="btn btn-ghost btn-sm">მთავარი</a>
+          <button onClick={onLogout} className="btn btn-ghost btn-sm">გამოსვლა</button>
+        </div>
+      </nav>
+      <div className="main">
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
+          <div>
+            <h1 style={{ fontFamily: "'Noto Serif Georgian',serif", fontSize: "28px" }}>ადმინ-პანელი</h1>
+            <p style={{ color: "var(--muted)", marginTop: "8px" }}>{polls.length} კენჭისყრა</p>
+          </div>
+        </div>
+        <CreatePage onBack={() => {}} onSubmit={onCreate} />
       </div>
     </div>
   );
