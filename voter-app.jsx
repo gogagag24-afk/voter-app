@@ -528,7 +528,7 @@ function AdminLogin({ onLogin }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== getPassword()) {
-      setError("პაროლი არასწორია");
+      setError("ავტორიზაცია ვერ გაიარა");
       return;
     }
     window.sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
@@ -536,19 +536,22 @@ function AdminLogin({ onLogin }) {
   };
 
   return (
-    <div className="app">
+    <div className="app" style={{ background: "#09090b", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
       <style>{CSS}</style>
-      <div className="main" style={{ display: "grid", placeItems: "center", minHeight: "100vh" }}>
-        <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "32px", width: "100%", maxWidth: "400px" }}>
-          <h2 style={{ fontFamily: "'Noto Serif Georgian',serif", marginBottom: "8px", fontSize: "24px" }}>შესვლა</h2>
-          <p style={{ color: "var(--muted)", marginBottom: "24px", fontSize: "14px" }}>შეიყვანე პაროლი</p>
-          <form onSubmit={handleSubmit}>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="პაროლი" style={{ width: "100%", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "12px", color: "var(--text)", fontSize: "16px", marginBottom: "16px" }} />
-            {error && <p style={{ color: "var(--no)", fontSize: "13px", marginBottom: "16px" }}>{error}</p>}
-            <button type="submit" className="btn btn-primary" style={{ width: "100%" }}>შესვლა</button>
-          </form>
-          <a href="/" style={{ display: "block", textAlign: "center", marginTop: "16px", color: "var(--muted)", fontSize: "14px" }}>← მთავარ გვერდზე</a>
+      <div style={{ width: "100%", maxWidth: "360px", background: "#18181b", border: "1px solid #27272a", borderRadius: "16px", padding: "32px", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)" }}>
+        <div style={{ textAlign: "center", marginBottom: "28px" }}>
+          <div style={{ background: "#fff", width: "48px", height: "48px", borderRadius: "12px", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: "16px", transform: "rotate(0deg)" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <h2 style={{ fontSize: "20px", fontWeight: "800", letterSpacing: "0.05em", textTransform: "uppercase", color: "#fff", marginBottom: "6px" }}>Admin Terminal</h2>
+          <p style={{ fontSize: "10px", fontWeight: "700", letterSpacing: "0.15em", textTransform: "uppercase", color: "#71717a", marginTop: "4px" }}>Access to polls and settings</p>
         </div>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <input type="password" placeholder="Authorization Key" value={password} onChange={(e) => setPassword(e.target.value)} style={{ width: "100%", background: "#09090b", border: "1px solid #27272a", borderRadius: "8px", padding: "12px 14px", color: "#fff", fontSize: "14px", outline: "none", transition: "all 0.2s" }} />
+          {error && <p style={{ color: "#ef4444", fontSize: "12px" }}>{error}</p>}
+          <button type="submit" style={{ width: "100%", background: "#fff", color: "#000", border: "none", borderRadius: "10px", padding: "14px", fontSize: "11px", fontWeight: "800", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", boxShadow: "0 10px 15px -3px rgba(255,255,255,0.1)" }}>Decrypt Access</button>
+        </form>
+        <a href="/" style={{ display: "block", textAlign: "center", marginTop: "20px", color: "#71717a", fontSize: "13px" }}>← Back to Home</a>
       </div>
     </div>
   );
@@ -578,21 +581,25 @@ function AdminPanel({ polls, onCreate, onLogout }) {
   };
 
   return (
-    <div className="app">
+    <div className="app" style={{ background: "#09090b", minHeight: "100vh" }}>
       <style>{CSS}</style>
-      <nav className="nav">
-        <div className="logo"><span>🗳 VOTER</span></div>
-        <div style={{ display: "flex", gap: 8 }}>
-          <a href="/" className="btn btn-ghost btn-sm">მთავარი</a>
-          <button onClick={() => setShowPasswordChange(true)} className="btn btn-ghost btn-sm">პაროლი</button>
-          <button onClick={onLogout} className="btn btn-ghost btn-sm">გამოსვლა</button>
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, background: "#09090b", borderBottom: "1px solid #27272a", padding: "16px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 50 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div style={{ background: "#fff", padding: "6px", borderRadius: "8px" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6"/></svg>
+          </div>
+          <div>
+            <span style={{ fontSize: "18px", fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", color: "#fff" }}>VOTER</span>
+            <p style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#71717a", marginTop: "2px" }}>Command Center</p>
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <a href="/" style={{ padding: "8px 14px", borderRadius: "8px", border: "1px solid #27272a", background: "transparent", color: "#a1a1aa", fontSize: "11px", fontWeight: 600, textDecoration: "none" }}>Home</a>
+          <button onClick={() => setShowPasswordChange(true)} style={{ padding: "8px 14px", borderRadius: "8px", border: "1px solid #27272a", background: "transparent", color: "#a1a1aa", fontSize: "11px", fontWeight: 600, cursor: "pointer" }}>Password</button>
+          <button onClick={onLogout} style={{ padding: "8px 14px", borderRadius: "8px", border: "1px solid #27272a", background: "transparent", color: "#a1a1aa", fontSize: "11px", fontWeight: 600, cursor: "pointer" }}>Exit</button>
         </div>
       </nav>
-      <div className="main">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
-          <div>
-            </div>
-        </div>
+      <div className="main" style={{ paddingTop: "80px" }}>
         <CreatePage onBack={() => {}} onSubmit={onCreate} />
       </div>
 
@@ -601,12 +608,12 @@ function AdminPanel({ polls, onCreate, onLogout }) {
           <div className="modal" onClick={(e) => e.stopPropagation()} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "24px", width: "100%", maxWidth: "360px" }}>
             <h3 style={{ marginBottom: "16px" }}>პაროლის შეცვლა</h3>
             <form onSubmit={handlePasswordChange}>
-              <input type="password" placeholder="ძირნი პაროლი" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} style={{ width: "100%", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "10px", color: "var(--text)", marginBottom: "12px" }} />
-              <input type="password" placeholder="ახალი პაროლი" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} style={{ width: "100%", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "10px", color: "var(--text)", marginBottom: "12px" }} />
-              {passwordMsg && <p style={{ color: passwordMsg.includes("✓") ? "var(--yes)" : "var(--no)", fontSize: "13px", marginBottom: "12px" }}>{passwordMsg}</p>}
+              <input type="password" placeholder="Current Key" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} style={{ width: "100%", background: "#09090b", border: "1px solid #27272a", borderRadius: "8px", padding: "12px", color: "#fff", marginBottom: "12px", fontSize: "14px" }} />
+              <input type="password" placeholder="New Key" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} style={{ width: "100%", background: "#09090b", border: "1px solid #27272a", borderRadius: "8px", padding: "12px", color: "#fff", marginBottom: "12px", fontSize: "14px" }} />
+              {passwordMsg && <p style={{ color: passwordMsg.includes("✓") ? "#22c55e" : "#ef4444", fontSize: "13px", marginBottom: "12px" }}>{passwordMsg}</p>}
               <div style={{ display: "flex", gap: "8px" }}>
-                <button type="button" onClick={() => setShowPasswordChange(false)} className="btn btn-ghost" style={{ flex: 1 }}>გაუქმება</button>
-                <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>შენახვა</button>
+                <button type="button" onClick={() => setShowPasswordChange(false)} style={{ flex: 1, padding: "12px", borderRadius: "8px", border: "1px solid #27272a", background: "transparent", color: "#a1a1aa", fontSize: "12px", fontWeight: 600, cursor: "pointer" }}>Cancel</button>
+                <button type="submit" style={{ flex: 1, padding: "12px", borderRadius: "8px", border: "none", background: "#fff", color: "#000", fontSize: "12px", fontWeight: 700, cursor: "pointer" }}>Save</button>
               </div>
             </form>
           </div>
